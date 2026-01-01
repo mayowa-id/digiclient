@@ -35,12 +35,12 @@ const VirtualCards: React.FC = () => {
 
   const { data: wallets = [] } = useQuery({
     queryKey: ['wallets', user?.sub],
-    queryFn: async () => api.get(`/wallets/user/${user?.sub || user?.userId}`).then(res => res.data.data),
+    queryFn: async () => api.get(`/wallets/user/${user?.sub || user?.sub}`).then(res => res.data.data),
   });
 
   const { data: cards = [], isLoading } = useQuery({
     queryKey: ['cards', user?.sub],
-    queryFn: async () => api.get(`/cards/user/${user?.sub || user?.userId}`).then(res => res.data.data),
+    queryFn: async () => api.get(`/cards/user/${user?.sub || user?.sub}`).then(res => res.data.data),
   });
 
   const createMutation = useMutation({
@@ -52,20 +52,20 @@ const VirtualCards: React.FC = () => {
     },
   });
 
-  const blockMutation = useMutation({
-    mutationFn: (id: string) => api.put(`/cards/${id}/block`),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cards'] }),
-  });
+//   const blockMutation = useMutation({
+//     mutationFn: (id: string) => api.put(`/cards/${id}/block`),
+//     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cards'] }),
+//   });
 
-  const unblockMutation = useMutation({
-    mutationFn: (id: string) => api.put(`/cards/${id}/unblock`),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cards'] }),
-  });
+//   const unblockMutation = useMutation({
+//     mutationFn: (id: string) => api.put(`/cards/${id}/unblock`),
+//     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cards'] }),
+//   });
 
-  const deleteMutation = useMutation({
-    mutationFn: (id: string) => api.delete(`/cards/${id}`),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cards'] }),
-  });
+//   const deleteMutation = useMutation({
+//     mutationFn: (id: string) => api.delete(`/cards/${id}`),
+//     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cards'] }),
+//   });
 
   return (
     <Box p={4}>

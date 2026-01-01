@@ -7,11 +7,11 @@ import WalletCard from '../components/WalletCard';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
-  const { data: wallets } = useQuery({
-    queryKey: ['wallets', user?.id],
-    queryFn: () => api.get(`/wallets/user/${user?.id}`).then(res => res.data.data),
-    enabled: !!user?.id,
-  });
+const { data: wallets } = useQuery({
+  queryKey: ['wallets', user?.sub],
+  queryFn: () => api.get(`/wallets/user/${user?.sub}`).then(res => res.data.data),
+  enabled: !!user?.sub,
+});
 
   return (
     <div>
