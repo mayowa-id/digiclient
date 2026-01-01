@@ -13,6 +13,7 @@ import Sidebar from './components/Sidebar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
+import Layout from './components/Layout';
 
 const theme = createTheme({
   palette: {
@@ -162,11 +163,12 @@ function App() {
                     <div style={{ flex: 1 }}>
                       <Header />
                       <Routes>
-                        <Route path="/" element={<Dashboard />} />
-                        <Route path="/wallets" element={<Wallets />} />
-                        <Route path="/transactions" element={<Transactions />} />
-                        <Route path="/cards" element={<VirtualCards />} />
-                        <Route path="/recurring" element={<RecurringPayments />} />
+                        <Route path="/" element={<Layout><Dashboard /></Layout>} />
+                        <Route path="/wallets" element={<Layout><Wallets /></Layout>} />
+                        <Route path="/transactions" element={<Layout><Transactions /></Layout>} />
+                        <Route path="/cards" element={<Layout><VirtualCards /></Layout>} />
+                        <Route path="/recurring" element={<Layout><RecurringPayments /></Layout>} />
+      
                       </Routes>
                     </div>
                   </div>
