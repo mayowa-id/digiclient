@@ -36,7 +36,7 @@ const Transactions = () => {
   const { data: wallets = [] } = useQuery({
     queryKey: ['wallets', user?.sub],
     queryFn: async () => {
-      const res = await api.get(`/wallets/user/${user?.sub || user?.userId}`);
+      const res = await api.get(`/wallets/user/${user?.sub || user?.sub}`);
       return res.data.data;
     },
     enabled: !!user,

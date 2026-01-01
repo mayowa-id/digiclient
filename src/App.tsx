@@ -8,12 +8,10 @@ import Wallets from './pages/Wallets';
 import Transactions from './pages/Transactions';
 import VirtualCards from './pages/VirtualCards';
 import RecurringPayments from './pages/RecurringPayments';
-import Header from './components/Header';
-import Sidebar from './components/Sidebar';
+import Layout from './components/Layout';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
-import Layout from './components/Layout';
 
 const theme = createTheme({
   palette: {
@@ -137,52 +135,82 @@ const theme = createTheme({
     },
   },
 });
+
 const queryClient = new QueryClient();
 
+// Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactElement }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return <Layout>{children}</Layout>;
 };
 
 function App() {
   return (
-  <ThemeProvider theme={theme}>
-    <CssBaseline />
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Router>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route
-              path="/*"
-              element={
-                <ProtectedRoute>
-                  <div style={{ display: 'flex' }}>
-                    <Sidebar />
-                    <div style={{ flex: 1 }}>
-                      <Header />
-                      <Routes>
-                        <Route path="/" element={<Layout><Dashboard /></Layout>} />
-                        <Route path="/wallets" element={<Layout><Wallets /></Layout>} />
-                        <Route path="/transactions" element={<Layout><Transactions /></Layout>} />
-                        <Route path="/cards" element={<Layout><VirtualCards /></Layout>} />
-                        <Route path="/recurring" element={<Layout><RecurringPayments /></Layout>} />
-      
-                      </Routes>
-                    </div>
-                  </div>
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Router>
-      </AuthProvider>
-    </QueryClientProvider>
-        </ThemeProvider>
-
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <Router>
+            <Routes>
+              {/* Public Routes - No Layout */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              
+              {/* Protected Routes - With Layout */}
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/wallets"
+                element={
+                  <ProtectedRoute>
+                    <Wallets />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/transactions"
+                element={
+                  <ProtectedRoute>
+                    <Transactions />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/cards"
+                element={
+                  <ProtectedRoute>
+                    <VirtualCards />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/recurring"
+                element={
+                  <ProtectedRoute>
+                    <RecurringPayments />
+                  </ProtectedRoute>
+                }
+              />
+              
+              {/* Catch all - redirect to home */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Router>
+        </AuthProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 
 export default App;
-

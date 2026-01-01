@@ -1,5 +1,3 @@
-// src/pages/Wallets.tsx
-
 import React, { useState } from 'react';
 import {
   Box,
@@ -34,43 +32,45 @@ interface Wallet {
   createdAt: string;
 }
 
+
 const Wallets: React.FC = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState('NGN');
 
-  const userId = user?.sub || user?.userId;
 
-  // Fetch wallets
-  const {
-    data: wallets = [],
-    isLoading,
-    error,
-  } = useQuery<Wallet[]>({
-    queryKey: ['wallets', userId],
-    queryFn: async () => {
-      const res = await api.get(`/wallets/user/${userId}`);
-      return res.data.data;
-    },
-    enabled: !!userId,
-  });
+const userId = user?.sub; 
 
-  // Create wallet mutation
-  const createMutation = useMutation({
-    mutationFn: async () => {
-      const res = await api.post('/wallets', {
-        userId,
-        currency: selectedCurrency,
-      });
-      return res.data.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['wallets'] });
-      setOpenDialog(false);
-      setSelectedCurrency('NGN');
-    },
-  });
+// Fetch wallets
+const {
+  data: wallets = [],
+  isLoading,
+  error,
+} = useQuery<Wallet[]>({
+  queryKey: ['wallets', userId],
+  queryFn: async () => {
+    const res = await api.get(`/wallets/user/${userId}`);
+    return res.data.data;
+  },
+  enabled: !!userId,
+});
+
+// Create wallet mutation
+const createMutation = useMutation({
+  mutationFn: async () => {
+    const res = await api.post('/wallets', {
+      userId,  // Send the UUID
+      currency: selectedCurrency,
+    });
+    return res.data.data;
+  },
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['wallets'] });
+    setOpenDialog(false);
+    setSelectedCurrency('NGN');
+  },
+});
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -130,6 +130,8 @@ const Wallets: React.FC = () => {
           </Typography>
         </Box>
       )}
+
+      
 
       {/* Wallets Grid */}
       {!isLoading && !error && wallets.length > 0 && (

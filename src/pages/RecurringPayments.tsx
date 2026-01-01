@@ -51,13 +51,13 @@ const RecurringPayments = () => {
   const { data: wallets = [] } = useQuery({
     queryKey: ['wallets', user?.sub],
     queryFn: async () =>
-      api.get(`/wallets/user/${user?.sub || user?.userId}`).then(r => r.data.data),
+      api.get(`/wallets/user/${user?.sub || user?.sub}`).then(r => r.data.data),
   });
 
   const { data: payments = [], isLoading } = useQuery({
     queryKey: ['recurring', user?.sub],
     queryFn: async () =>
-      api.get(`/recurring-payments/user/${user?.sub || user?.userId}`).then(r => r.data.data),
+      api.get(`/recurring-payments/user/${user?.sub || user?.sub}`).then(r => r.data.data),
   });
 
   const createMutation = useMutation({
