@@ -39,38 +39,36 @@ const Wallets: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState('NGN');
 
+  const userId = user?.sub || user?.sub;
 
-const userId = user?.sub; 
+  const {
+    data: wallets = [],
+    isLoading,
+    error,
+  } = useQuery<Wallet[]>({
+    queryKey: ['wallets', userId],
+    queryFn: async () => {
+      const res = await api.get(`/wallets/user/${userId}`);
+      return res.data.data;
+    },
+    enabled: !!userId,
+  });
 
-// Fetch wallets
-const {
-  data: wallets = [],
-  isLoading,
-  error,
-} = useQuery<Wallet[]>({
-  queryKey: ['wallets', userId],
-  queryFn: async () => {
-    const res = await api.get(`/wallets/user/${userId}`);
-    return res.data.data;
-  },
-  enabled: !!userId,
-});
-
-// Create wallet mutation
-const createMutation = useMutation({
-  mutationFn: async () => {
-    const res = await api.post('/wallets', {
-      userId,  // Send the UUID
-      currency: selectedCurrency,
-    });
-    return res.data.data;
-  },
-  onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ['wallets'] });
-    setOpenDialog(false);
-    setSelectedCurrency('NGN');
-  },
-});
+  // Create wallet mutation
+  const createMutation = useMutation({
+    mutationFn: async () => {
+      const res = await api.post('/wallets', {
+        userId,
+        currency: selectedCurrency,
+      });
+      return res.data.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['wallets'] });
+      setOpenDialog(false);
+      setSelectedCurrency('NGN');
+    },
+  });
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
