@@ -22,16 +22,27 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
+// interface Wallet {
+//   walletNumber: string;
+//   currency: string;
+//   balance: {
+//     amount: number;
+//     currency: string;
+//   };
+//   createdAt: string;
+//}
 interface Wallet {
+  id: string;
   walletNumber: string;
   currency: string;
-  balance: {
-    amount: number;
-    currency: string;
-  };
+  balance: number;         
+  availableBalance: number;
+  pendingBalance: number;
+  isActive: boolean;
+  isPrimary: boolean;
   createdAt: string;
+  updatedAt: string;
 }
-
 
 const Wallets: React.FC = () => {
   const { user } = useAuth();
@@ -191,12 +202,12 @@ const {
                     Available Balance
                   </Typography>
                   <Typography variant="h3" fontWeight="bold" mt={1}>
-                    {wallet.balance.amount.toLocaleString(undefined, {
+                    {wallet.balance.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{' '}
                     <Chip
-                      label={wallet.balance.currency}
+                      label={wallet.currency}
                       size="small"
                       color="primary"
                       sx={{ ml: 1, fontWeight: 'bold' }}
