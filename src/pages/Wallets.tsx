@@ -67,7 +67,7 @@ const {
   // Create wallet mutation
   const createMutation = useMutation({
     mutationFn: async () => {
-      const res = await api.post('/wallets', {
+      const res = await api.post('/my-wallets', {
         currency: selectedCurrency,
       });
       return res.data.data;

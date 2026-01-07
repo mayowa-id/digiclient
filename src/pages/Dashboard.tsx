@@ -67,7 +67,7 @@ const Dashboard: React.FC = () => {
           variant="contained"
           size="large"
           startIcon={<AddIcon />}
-          onClick={() => navigate('/wallets')}
+          onClick={() => navigate('/my-wallets')}
           sx={{
             background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
             px: 4,
@@ -217,7 +217,7 @@ const Dashboard: React.FC = () => {
               variant="contained"
               size="large"
               startIcon={<AddIcon />}
-              onClick={() => navigate('/wallets')}
+              onClick={() => navigate('/my-wallets')}
               sx={{
                 background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
                 px: 4,
@@ -239,7 +239,7 @@ const Dashboard: React.FC = () => {
               <WalletCard 
                 key={wallet.walletNumber} 
                 wallet={wallet} 
-                onClick={() => navigate('/wallets')}
+                onClick={() => navigate('/my-wallets')}
               />
             ))}
           </Box>

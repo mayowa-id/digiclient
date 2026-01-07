@@ -35,7 +35,7 @@ const VirtualCards: React.FC = () => {
 
   const { data: wallets = [] } = useQuery({
     queryKey: ['wallets', user?.sub],
-    queryFn: async () => api.get(`/wallets/user/${user?.sub || user?.sub}`).then(res => res.data.data),
+    queryFn: async () => api.get(`/my-wallets/user/${user?.sub || user?.sub}`).then(res => res.data.data),
   });
 
   const { data: cards = [], isLoading } = useQuery({

@@ -51,7 +51,7 @@ const RecurringPayments = () => {
   const { data: wallets = [] } = useQuery({
     queryKey: ['wallets', user?.sub],
     queryFn: async () =>
-      api.get(`/wallets/user/${user?.sub || user?.sub}`).then(r => r.data.data),
+      api.get(`/my-wallets/user/${user?.sub || user?.sub}`).then(r => r.data.data),
   });
 
   const { data: payments = [], isLoading } = useQuery({
