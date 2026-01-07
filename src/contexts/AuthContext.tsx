@@ -46,6 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(decoded);
   };
 
+  
   const register = async (data: any) => {
     await api.post('/auth/register', data);
   };

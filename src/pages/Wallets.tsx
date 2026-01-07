@@ -41,18 +41,17 @@ const Wallets: React.FC = () => {
 
   const userId = user?.sub || user?.sub;
 
-  const {
-    data: wallets = [],
-    isLoading,
-    error,
-  } = useQuery<Wallet[]>({
-    queryKey: ['wallets', userId],
-    queryFn: async () => {
-      const res = await api.get(`/wallets/user/${userId}`);
-      return res.data.data;
-    },
-    enabled: !!userId,
-  });
+const {
+  data: wallets = [],
+  isLoading,
+  error,
+} = useQuery<Wallet[]>({
+  queryKey: ['wallets'],
+  queryFn: async () => {
+    const res = await api.get(`/wallets/my-wallets`);
+    return res.data.data;
+  },
+});
 
   // Create wallet mutation
   const createMutation = useMutation({
@@ -68,6 +67,8 @@ const Wallets: React.FC = () => {
       setSelectedCurrency('NGN');
     },
   });
+
+  
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
