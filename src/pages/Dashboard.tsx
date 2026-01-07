@@ -14,14 +14,13 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   
   const { data: wallets, isLoading } = useQuery({
-    queryKey: ['wallets', user?.sub],
-    queryFn: () => api.get(`/wallets/user/${user?.sub}`).then(res => res.data.data),
-    enabled: !!user?.sub,
+    queryKey: ['wallets'],
+    queryFn: () => api.get('/wallets/my-wallets').then(res => res.data.data),
+    enabled: !!user,
   });
 
-  // Calculate total balance across all wallets
   const totalBalance = wallets?.reduce((sum: number, wallet: any) => {
-    return sum + wallet.balance.amount;
+    return sum + (wallet.availableBalance || 0);  // Use availableBalance
   }, 0) || 0;
 
   return (
@@ -90,7 +89,7 @@ const Dashboard: React.FC = () => {
 
       {/* Stats Overview */}
       <Grid container spacing={3} sx={{ mb: 6 }}>
-        <Grid size={12} >
+        <Grid size={12}>
           <Box
             sx={{
               background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',

@@ -48,17 +48,31 @@ const RecurringPayments = () => {
     frequency: 'MONTHLY',
   });
 
-  const { data: wallets = [] } = useQuery({
-    queryKey: ['wallets', user?.sub],
-    queryFn: async () =>
-      api.get(`/my-wallets/user/${user?.sub || user?.sub}`).then(r => r.data.data),
-  });
+  // const { data: wallets = [] } = useQuery({
+  //   queryKey: ['wallets', user?.sub],
+  //   queryFn: async () =>
+  //     api.get(`/my-wallets/user/${user?.sub || user?.sub}`).then(r => r.data.data),
+  // });
 
-  const { data: payments = [], isLoading } = useQuery({
-    queryKey: ['recurring', user?.sub],
-    queryFn: async () =>
-      api.get(`/recurring-payments/user/${user?.sub || user?.sub}`).then(r => r.data.data),
-  });
+  // const { data: payments = [], isLoading } = useQuery({
+  //   queryKey: ['recurring', user?.sub],
+  //   queryFn: async () =>
+  //     api.get(`/recurring-payments/user/${user?.sub || user?.sub}`).then(r => r.data.data),
+  // });
+
+const { data: wallets = [] } = useQuery({
+  queryKey: ['wallets'],
+  queryFn: async () =>
+    api.get('/wallets/my-wallets').then(r => r.data.data),
+  enabled: !!user,
+});
+
+const { data: payments = [], isLoading } = useQuery({
+  queryKey: ['recurring'],
+  queryFn: async () =>
+    api.get('/recurring-payments/my-payments').then(r => r.data.data),
+  enabled: !!user,
+});
 
   const createMutation = useMutation({
     mutationFn: (data: any) => api.post('/recurring-payments', data),
