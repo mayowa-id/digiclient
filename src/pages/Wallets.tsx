@@ -58,7 +58,6 @@ const Wallets: React.FC = () => {
   const createMutation = useMutation({
     mutationFn: async () => {
       const res = await api.post('/wallets', {
-        userId,
         currency: selectedCurrency,
       });
       return res.data.data;
