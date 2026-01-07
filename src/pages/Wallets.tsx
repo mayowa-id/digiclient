@@ -202,7 +202,7 @@ const {
                     Available Balance
                   </Typography>
                   <Typography variant="h3" fontWeight="bold" mt={1}>
-                    {wallet.balance.toLocaleString(undefined, {
+                    {wallet.availableBalance.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}{' '}
@@ -215,6 +215,7 @@ const {
                   </Typography>
                 </Box>
 
+                {/* Balance */}
                 {/* Footer */}
                 <Typography variant="caption" color="text.secondary">
                   Created on{' '}
