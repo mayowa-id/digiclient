@@ -1,4 +1,3 @@
-// import React from 'react';
 import React, { useState } from 'react';
 import {
   Box,
@@ -19,8 +18,8 @@ import { useAuth } from '../contexts/AuthContext';
 
 interface VirtualCard {
   id: string;
-  cardNumber: string; // masked or full
-  brand: string; // VISA, MASTERCARD
+  cardNumber: string;
+  brand: string;
   expiryMonth: string;
   expiryYear: string;
   status: 'ACTIVE' | 'BLOCKED' | 'DELETED';
@@ -34,13 +33,15 @@ const VirtualCards: React.FC = () => {
   const [selectedWallet, setSelectedWallet] = useState('');
 
   const { data: wallets = [] } = useQuery({
-    queryKey: ['wallets', user?.sub],
-    queryFn: async () => api.get(`/my-wallets/user/${user?.sub || user?.sub}`).then(res => res.data.data),
+    queryKey: ['wallets'],
+    queryFn: async () => api.get('/wallets/my-wallets').then(res => res.data.data),
+    enabled: !!user,
   });
 
   const { data: cards = [], isLoading } = useQuery({
-    queryKey: ['cards', user?.sub],
-    queryFn: async () => api.get(`/cards/user/${user?.sub || user?.sub}`).then(res => res.data.data),
+    queryKey: ['cards'],
+    queryFn: async () => api.get('/cards/my-cards').then(res => res.data.data),
+    enabled: !!user,
   });
 
   const createMutation = useMutation({
@@ -52,21 +53,6 @@ const VirtualCards: React.FC = () => {
     },
   });
 
-//   const blockMutation = useMutation({
-//     mutationFn: (id: string) => api.put(`/cards/${id}/block`),
-//     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cards'] }),
-//   });
-
-//   const unblockMutation = useMutation({
-//     mutationFn: (id: string) => api.put(`/cards/${id}/unblock`),
-//     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cards'] }),
-//   });
-
-//   const deleteMutation = useMutation({
-//     mutationFn: (id: string) => api.delete(`/cards/${id}`),
-//     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cards'] }),
-//   });
-
   return (
     <Box p={4}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
@@ -75,23 +61,24 @@ const VirtualCards: React.FC = () => {
           Create Card
         </Button>
       </Box>
-{isLoading ? (
-  <CircularProgress />
-) : cards.length === 0 ? (
-  <Typography>No virtual cards yet. Create one to start spending!</Typography>
-) : (
-  <div style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-    gap: '32px'
-  }}>
-    {cards.map((card: VirtualCard) => (
-      <Card key={card.id} sx={{ position: 'relative', bgcolor: '#1a1a2e', color: 'white' }}>
-        {/* Rest of card content stays the same */}
-      </Card>
-    ))}
-  </div>
-)}
+
+      {isLoading ? (
+        <CircularProgress />
+      ) : cards.length === 0 ? (
+        <Typography>No virtual cards yet. Create one to start spending!</Typography>
+      ) : (
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+          gap: '32px'
+        }}>
+          {cards.map((card: VirtualCard) => (
+            <Card key={card.id} sx={{ position: 'relative', bgcolor: '#1a1a2e', color: 'white' }}>
+              {/* Rest of card content stays the same */}
+            </Card>
+          ))}
+        </div>
+      )}
 
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Create Virtual Card</DialogTitle>
@@ -108,7 +95,7 @@ const VirtualCards: React.FC = () => {
             <option value="">-- Select Wallet --</option>
             {wallets.map((w: any) => (
               <option key={w.walletNumber} value={w.walletNumber}>
-                {w.walletNumber} ({w.balance.amount} {w.balance.currency})
+                {w.walletNumber} ({w.availableBalance} {w.currency})
               </option>
             ))}
           </TextField>
@@ -129,5 +116,3 @@ const VirtualCards: React.FC = () => {
 };
 
 export default VirtualCards;
-
-

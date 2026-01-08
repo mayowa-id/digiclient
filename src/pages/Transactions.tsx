@@ -36,7 +36,7 @@ const Transactions = () => {
   const { data: wallets = [] } = useQuery({
     queryKey: ['wallets', user?.sub],
     queryFn: async () => {
-      const res = await api.get(`/my-wallets/user/${user?.sub || user?.sub}`);
+    const res = await api.get('/wallets/my-wallets'); 
       return res.data.data;
     },
     enabled: !!user,
@@ -120,8 +120,8 @@ const Transactions = () => {
             <option value="">-- Choose a wallet --</option>
             {wallets.map((w: any) => (
               <option key={w.walletNumber} value={w.walletNumber}>
-                {w.walletNumber} ({w.balance.amount} {w.balance.currency})
-              </option>
+                 {w.walletNumber} ({w.availableBalance} {w.currency}) 
+                </option>
             ))}
           </TextField>
 

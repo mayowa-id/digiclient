@@ -63,23 +63,19 @@ const {
     return res.data.data;
   },
 });
-
-  // Create wallet mutation
-  const createMutation = useMutation({
-    mutationFn: async () => {
-      const res = await api.post('/my-wallets', {
-        currency: selectedCurrency,
-      });
-      return res.data.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['wallets'] });
-      setOpenDialog(false);
-      setSelectedCurrency('NGN');
-    },
-  });
-
-  
+const createMutation = useMutation({
+  mutationFn: async () => {
+    const res = await api.post('/wallets', { 
+      currency: selectedCurrency,
+    });
+    return res.data.data;
+  },
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['wallets'] });
+    setOpenDialog(false);
+    setSelectedCurrency('NGN');
+  },
+});
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
