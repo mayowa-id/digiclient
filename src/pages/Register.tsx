@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Typography, Box, Paper, Link as MuiLink, Alert } from '@mui/material';
+import { TextField, Button, Container, Typography, Box, Paper, Link as MuiLink, Alert, CircularProgress } from '@mui/material';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -21,21 +21,23 @@ const Register: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  
+const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setSuccess(false);
-    try {
-      await register(formData);
-      setSuccess(true);
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
-    } catch (error: any) {
-      setError(error.response?.data?.message || 'Registration failed. Please try again.');
-    }
-  };
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError('');
+  setIsLoading(true);
+  try {
+    await register(formData);
+    navigate('/login');
+  } catch (error: any) {
+    setError(error.response?.data?.message || 'Registration failed');
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   return (
     <Box
@@ -316,30 +318,41 @@ const Register: React.FC = () => {
                   },
                 }}
               />
-
-              <Button
-                type="submit"
-                variant="contained"
-                size="large"
-                fullWidth
-                startIcon={<HowToRegIcon />}
-                sx={{
-                  py: 1.5,
-                  fontSize: 16,
-                  fontWeight: 700,
-                  borderRadius: 3,
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
-                  boxShadow: '0 10px 30px rgba(139, 92, 246, 0.3)',
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  '&:hover': {
-                    background: 'linear-gradient(135deg, #7c3aed 0%, #db2777 100%)',
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 15px 40px rgba(139, 92, 246, 0.4)',
-                  },
-                }}
-              >
-                Create Account
-              </Button>
+<Button
+  type="submit"
+  variant="contained"
+  size="large"
+  disabled={isLoading}  // ✅ Already there
+  fullWidth
+  startIcon={!isLoading && <HowToRegIcon />}  // ✅ Hide icon when loading
+  sx={{
+    py: 1.5,
+    fontSize: 16,
+    fontWeight: 700,
+    borderRadius: 3,
+    background: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
+    boxShadow: '0 10px 30px rgba(139, 92, 246, 0.3)',
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    '&:hover': {
+      background: 'linear-gradient(135deg, #7c3aed 0%, #db2777 100%)',
+      transform: 'translateY(-2px)',
+      boxShadow: '0 15px 40px rgba(139, 92, 246, 0.4)',
+    },
+    '&:disabled': {  
+      background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.5) 0%, rgba(236, 72, 153, 0.5) 100%)',
+      color: 'rgba(255, 255, 255, 0.7)',
+    },
+  }}
+>
+  {isLoading ? ( 
+    <>
+      <CircularProgress size={20} sx={{ mr: 1, color: 'white' }} />
+      Creating Account...
+    </>
+  ) : (
+    'Create Account'
+  )}
+</Button>
             </Box>
           </form>
 
