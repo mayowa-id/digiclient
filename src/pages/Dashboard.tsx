@@ -66,7 +66,7 @@ const Dashboard: React.FC = () => {
           variant="contained"
           size="large"
           startIcon={<AddIcon />}
-          onClick={() => navigate('/my-wallets')}
+          onClick={() => navigate('/wallets')}
           sx={{
             background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
             px: 4,
